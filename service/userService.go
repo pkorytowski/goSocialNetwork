@@ -14,3 +14,18 @@ func GetUsers() []model.User {
 	model.DB.Find(&users)
 	return users
 }
+
+func GetUserById(id int) model.User {
+	var user model.User
+	model.DB.First(&user, id)
+	return user
+}
+
+func UpdateUser(user model.User) model.User {
+	model.DB.Save(&user)
+	return user
+}
+
+func DeleteUser(user model.User) {
+	model.DB.Delete(&user)
+}
