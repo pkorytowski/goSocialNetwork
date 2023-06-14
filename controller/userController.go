@@ -3,14 +3,13 @@ package controller
 import (
 	"net/http"
 	"socialNetwork/model"
+	"socialNetwork/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetUsers(c *gin.Context) {
-	var users []model.User
-	model.DB.Find(&users)
-
+	users := service.GetUsers()
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
@@ -21,9 +20,7 @@ func AddUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	addedUser := service.AddUser(input)
 
-	// Create book
-	model.DB.Create(&input)
-
-	c.JSON(http.StatusOK, gin.H{"data": input})
+	c.JSON(http.StatusOK, gin.H{"data": addedUser})
 }
