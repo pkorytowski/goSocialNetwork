@@ -29,3 +29,9 @@ func UpdateUser(user model.User) model.User {
 func DeleteUser(user model.User) {
 	model.DB.Delete(&user)
 }
+
+func GetUserByEmail(email string) model.User {
+	var user model.User
+	model.DB.Where("email = ?", email).First(&user)
+	return user
+}

@@ -46,7 +46,6 @@ func UpdateUser(c *gin.Context) {
 	user.Name = input.Name
 	user.Surname = input.Surname
 	user.Email = input.Email
-	user.Password = input.Password
 	user.Interests = input.Interests
 	user.Hobby = input.Hobby
 	user.Age = input.Age
