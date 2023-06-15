@@ -10,6 +10,16 @@ import (
 )
 
 func GetUsers(c *gin.Context) {
+	email := c.Query("email")
+	if email != "" {
+		user := service.GetUserByEmail(email)
+		if user.ID == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"data": user})
+		return
+	}
 	users := service.GetUsers()
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
