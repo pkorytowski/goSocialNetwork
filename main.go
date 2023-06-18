@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"socialNetwork/controller"
+	"socialNetwork/middleware"
 	"socialNetwork/model"
 )
 
@@ -18,10 +19,23 @@ func main() {
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.GET("/users", controller.GetUsers)
-	r.GET("/users/:id", controller.GetUserById)
-	r.POST("/users", controller.AddUser)
-	r.PUT("/users/:id", controller.UpdateUser)
-	r.DELETE("/users/:id", controller.DeleteUser)
+
+	public := r.Group("/auth")
+
+	//register
+	public.POST("/register", controller.RegisterUser)
+
+	//login
+	public.POST("/login", controller.LoginUser)
+
+	protected := r.Group("/api")
+	protected.Use(middleware.JwtAuthMiddleware())
+	//users
+	protected.GET("/users", controller.GetUsers)
+	protected.GET("/users/:id", controller.GetUserById)
+	protected.POST("/users", controller.AddUser)
+	protected.PUT("/users/:id", controller.UpdateUser)
+	protected.DELETE("/users/:id", controller.DeleteUser)
+
 	return r
 }
