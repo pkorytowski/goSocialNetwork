@@ -28,7 +28,13 @@ func LoginUser(email string, password string) (string, error) {
 		return "", err
 	}
 
-	token, err := token.GenerateToken(uint(l.ID))
+	u := model.User{}
+	err = model.DB.Where("email = ?", email).First(&u).Error
+	if err != nil {
+		return "", err
+	}
+
+	token, err := token.GenerateToken(uint(u.ID))
 
 	if err != nil {
 		return "", err
