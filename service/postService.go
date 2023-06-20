@@ -4,7 +4,7 @@ import "socialNetwork/model"
 
 func GetPostsByUserId(userId int) []model.Post {
 	var posts []model.Post
-	model.DB.Where("user_id = ?", userId).Find(&posts)
+	model.DB.Where("author_id = ?", userId).Find(&posts)
 	return posts
 }
 
@@ -28,7 +28,6 @@ func AddPost(data map[string]interface{}) (*model.Post, error) {
 
 func UpdatePost(post model.Post) model.Post {
 	model.DB.Save(&post)
-
 	return post
 }
 

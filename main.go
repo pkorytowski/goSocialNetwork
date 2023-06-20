@@ -38,7 +38,11 @@ func setupRouter() *gin.Engine {
 	protected.DELETE("/users/:id", controller.DeleteUser)
 
 	//posts
+	protected.GET("/posts", controller.GetPostsByUserId)
 	protected.POST("/posts", controller.AddPost)
+	protected.GET("/posts/:id", controller.GetPostById)
+	protected.PATCH("/posts/:id", controller.UpdatePost)
+	protected.DELETE("/posts/:id", controller.DeletePost)
 
 	return r
 }
