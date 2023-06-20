@@ -2,14 +2,20 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"socialNetwork/dto"
 	"socialNetwork/service"
 )
 
 func LoginUser(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
+	loginDto := dto.LoginDto{}
+	err := c.ShouldBindJSON(&loginDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	//check if email and password are correct
-	token, err := service.LoginUser(email, password)
+	token, err := service.LoginUser(loginDto)
 
 	if err != nil {
 		c.JSON(401, gin.H{

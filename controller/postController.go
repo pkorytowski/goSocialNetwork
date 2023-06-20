@@ -10,12 +10,7 @@ import (
 )
 
 func GetPostsByUserId(c *gin.Context) {
-	userId, err := token.ExtractTokenID(c)
-
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
+	userId, _ := token.ExtractTokenID(c)
 
 	posts := service.GetPostsByUserId(int(userId))
 	c.JSON(http.StatusOK, gin.H{"data": posts})
@@ -26,14 +21,10 @@ type PostInput struct {
 }
 
 func AddPost(c *gin.Context) {
-	userId, err := token.ExtractTokenID(c)
-
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
+	userId, _ := token.ExtractTokenID(c)
 
 	var input PostInput
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -44,7 +35,7 @@ func AddPost(c *gin.Context) {
 		"content": input.Content,
 	}
 
-	addedPost, err := service.AddPost(postInput)
+	addedPost, _ := service.AddPost(postInput)
 
 	c.JSON(http.StatusCreated, gin.H{"data": addedPost})
 }
