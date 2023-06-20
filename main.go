@@ -44,6 +44,11 @@ func setupRouter() *gin.Engine {
 	protected.GET("/posts/:id", controller.GetPostById)
 	protected.PATCH("/posts/:id", controller.UpdatePost)
 	protected.DELETE("/posts/:id", controller.DeletePost)
+	protected.GET("/posts/:id/likes", controller.GetLikesByPostId)
+
+	//likes
+	protected.POST("/likes", controller.AddLike)
+	protected.DELETE("/likes/:id", controller.DeleteLike)
 
 	// comments
 	protected.GET("/comments/:id", controller.GetCommentsByPostId)

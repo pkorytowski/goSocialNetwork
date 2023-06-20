@@ -7,7 +7,7 @@ import (
 
 type LoginData struct {
 	ID       int    `json:"id" gorm:"primary_key auto_increment"`
-	Email    string `json:"email" gorm:"foreignKey:Email;references:Email"`
+	Email    string `json:"email" gorm:"foreignKey:users references:email"`
 	Password string `json:"password"`
 }
 

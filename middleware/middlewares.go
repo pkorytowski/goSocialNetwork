@@ -1,9 +1,7 @@
 package middleware
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"io"
 	"net/http"
 	"socialNetwork/token"
 	"strconv"
@@ -21,20 +19,16 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func TheSameIdMiddlewareForPostOperation() gin.HandlerFunc {
+func TheSameIdMiddlewareForGetOperation() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId, _ := token.ExtractTokenID(c)
-		mapbody := make(map[string]string)
-		strbody, _ := io.ReadAll(c.Request.Body)
-		json.Unmarshal(strbody, &mapbody)
-		idx, _ := strconv.Atoi(mapbody["id"])
-
-		if userId != uint(idx) {
-			c.String(http.StatusUnauthorized, "Unauthorized")
+		tokenId, _ := token.ExtractTokenID(c)
+		idstr, _ := c.Params.Get("id")
+		id, _ := strconv.Atoi(idstr)
+		if tokenId != uint(id) {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
 			return
 		}
-
 		c.Next()
 	}
 }
