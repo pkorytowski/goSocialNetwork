@@ -37,5 +37,8 @@ func setupRouter() *gin.Engine {
 	protected.PUT("/users/:id", controller.UpdateUser)
 	protected.DELETE("/users/:id", controller.DeleteUser)
 
+	//posts
+	protected.POST("/posts", controller.AddPost)
+
 	return r
 }
