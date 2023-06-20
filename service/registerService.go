@@ -1,13 +1,16 @@
 package service
 
-import "socialNetwork/model"
+import (
+	"socialNetwork/dto"
+	"socialNetwork/model"
+)
 
-func RegisterUser(email string, password string) bool {
+func RegisterUser(loginDto dto.LoginDto) bool {
 
-	user := model.User{Email: email}
+	user := model.User{Email: loginDto.Email}
 
 	AddUser(user)
-	loginData := model.LoginData{Email: email, Password: password}
+	loginData := model.LoginData{Email: loginDto.Email, Password: loginDto.Password}
 	model.DB.Create(&loginData)
 
 	return true

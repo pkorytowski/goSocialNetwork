@@ -22,6 +22,7 @@ func GetUserById(id int) model.User {
 }
 
 func UpdateUser(user model.User) model.User {
+
 	model.DB.Save(&user)
 	return user
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"socialNetwork/model"
 	"socialNetwork/service"
+	"socialNetwork/token"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -47,6 +48,13 @@ func UpdateUser(c *gin.Context) {
 	var input model.User
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
+
+	tokenId, _ := token.ExtractTokenID(c)
+	if tokenId != uint(idx) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	user := service.GetUserById(idx)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -55,7 +63,6 @@ func UpdateUser(c *gin.Context) {
 	}
 	user.Name = input.Name
 	user.Surname = input.Surname
-	user.Email = input.Email
 	user.Interests = input.Interests
 	user.Hobby = input.Hobby
 	user.Age = input.Age
