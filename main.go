@@ -30,6 +30,7 @@ func setupRouter() *gin.Engine {
 
 	protected := r.Group("/api")
 	protected.Use(middleware.JwtAuthMiddleware())
+
 	//users
 	protected.GET("/users", controller.GetUsers)
 	protected.GET("/users/:id", controller.GetUserById)
@@ -44,5 +45,10 @@ func setupRouter() *gin.Engine {
 	protected.PATCH("/posts/:id", controller.UpdatePost)
 	protected.DELETE("/posts/:id", controller.DeletePost)
 
+	// comments
+	protected.GET("/comments/:id", controller.GetCommentsByPostId)
+	protected.POST("/comments", controller.AddComment)
+	protected.PATCH("/comments/:id", controller.UpdateComment)
+	protected.DELETE("/comments/:id", controller.DeleteComment)
 	return r
 }
