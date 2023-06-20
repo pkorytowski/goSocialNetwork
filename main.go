@@ -55,5 +55,11 @@ func setupRouter() *gin.Engine {
 	protected.POST("/comments", controller.AddComment)
 	protected.PATCH("/comments/:id", controller.UpdateComment)
 	protected.DELETE("/comments/:id", controller.DeleteComment)
+
+	// friends
+	protected.POST("/friends", controller.AddFollow)
+	protected.DELETE("/friends/:id", controller.DeleteFollow)
+	protected.GET("/friends/:id", controller.GetFollowedByUserId)
+
 	return r
 }
