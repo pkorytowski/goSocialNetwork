@@ -7,6 +7,16 @@ import (
 	"socialNetwork/service"
 )
 
+// LoginUser godoc
+// @Summary Login user
+// @Description Login user to get access to api
+// @Tags Authorization
+// @Accept json
+// @Produce json
+// @Param user body dto.LoginDto true "User credentials"
+// @Success 200 {object} dto.TokenDto "token"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /auth/login [post]
 func LoginUser(c *gin.Context) {
 	loginDto := dto.LoginDto{}
 	err := c.ShouldBindJSON(&loginDto)
@@ -23,8 +33,8 @@ func LoginUser(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, gin.H{
-		"token": token,
+	c.JSON(200, dto.TokenDto{
+		Token: token,
 	})
 
 }

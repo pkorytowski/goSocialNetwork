@@ -7,6 +7,14 @@ import (
 	"socialNetwork/service"
 )
 
+// RegisterUser godoc
+// @Summary Register user
+// @Description Register new user in system and create an account
+// @Tags Authorization
+// @Accept json
+// @Success 201 "Created"
+// @Failure 400 {string} string "Reason"
+// @Router /auth/register [post]
 func RegisterUser(c *gin.Context) {
 	loginDto := dto.LoginDto{}
 	err := c.ShouldBindJSON(&loginDto)
