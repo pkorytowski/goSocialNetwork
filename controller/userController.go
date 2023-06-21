@@ -19,7 +19,7 @@ import (
 // @Success 200 {array} model.User
 // @Failure 404 "Not found"
 // @Router /api/users [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetUsers(c *gin.Context) {
 	email := c.Query("email")
 	if email != "" {
@@ -45,7 +45,7 @@ func GetUsers(c *gin.Context) {
 // @Success 201 {object} model.User
 // @Failure 400 "Bad request"
 // @Router /api/users [post]
-// @Security JwtAuth
+// @Security Bearer
 func AddUser(c *gin.Context) {
 	var input model.User
 
@@ -67,7 +67,7 @@ func AddUser(c *gin.Context) {
 // @Success 200 {object} model.User
 // @Failure 404 "Not found"
 // @Router /api/users/{id} [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetUserById(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
@@ -86,8 +86,8 @@ func GetUserById(c *gin.Context) {
 // @Success 200 {object} model.User
 // @Failure 400 "Bad request"
 // @Failure 401 "Unauthorized"
-// @Router /api/users/{id} [patch]
-// @Security JwtAuth
+// @Router /api/users/{id} [put]
+// @Security Bearer
 func UpdateUser(c *gin.Context) {
 	var input model.User
 	id := c.Param("id")
@@ -124,7 +124,7 @@ func UpdateUser(c *gin.Context) {
 // @Success 204 "No content"
 // @Param id path int true "User ID"
 // @Router /api/users/{id} [delete]
-// @Security JwtAuth
+// @Security Bearer
 func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)

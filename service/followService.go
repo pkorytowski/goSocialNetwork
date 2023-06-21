@@ -29,3 +29,9 @@ func GetFollowedByUserId(userId int) []model.Follow {
 	model.DB.Where("follows_id = ?", userId).Find(&follows)
 	return follows
 }
+
+func GetFollowsByUserId(userId int) []model.Follow {
+	var follows []model.Follow
+	model.DB.Where("followed_id = ?", userId).Find(&follows)
+	return follows
+}

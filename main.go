@@ -14,7 +14,10 @@ import (
 //@version 1.0
 //@description This is a social network API server created for GO classes.
 //@host localhost:8080
-//@BasePath /api
+//@BasePath
+//@securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
 
 func main() {
 	model.ConnectDataBase()
@@ -47,6 +50,7 @@ func setupRouter() *gin.Engine {
 	protected.GET("/users", controller.GetUsers)
 	protected.GET("/users/:id", controller.GetUserById)
 	protected.GET("/users/:id/posts", controller.GetPostsByUserId)
+	protected.GET("/users/:id/followers", controller.GetFollowsByUserId)
 	protected.POST("/users", controller.AddUser)
 	protected.PUT("/users/:id", controller.UpdateUser)
 	protected.DELETE("/users/:id", controller.DeleteUser)
@@ -69,9 +73,9 @@ func setupRouter() *gin.Engine {
 	protected.DELETE("/comments/:id", controller.DeleteComment)
 
 	// friends
-	protected.POST("/friends", controller.AddFollow)
-	protected.DELETE("/friends/:id", controller.DeleteFollow)
-	protected.GET("/friends/:id", controller.GetFollowedByUserId)
+	protected.POST("/follows", controller.AddFollow)
+	protected.DELETE("/follows/:id", controller.DeleteFollow)
+	protected.GET("/follows/:id", controller.GetFollowedByUserId)
 
 	return r
 }
