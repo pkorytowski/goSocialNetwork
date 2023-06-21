@@ -10,21 +10,42 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUsers godoc
+// @Summary Get all users
+// @Description Get all users. Pass email query param to get user by email
+// @Tags Users
+// @Produce json
+// @Param email query string false "Email"
+// @Success 200 {array} model.User
+// @Failure 404 "Not found"
+// @Router /api/users [get]
+// @Security JwtAuth
 func GetUsers(c *gin.Context) {
 	email := c.Query("email")
 	if email != "" {
 		user := service.GetUserByEmail(email)
 		if user.ID == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+			c.Status(http.StatusNotFound)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": user})
+		c.JSON(http.StatusOK, []model.User{user})
 		return
 	}
 	users := service.GetUsers()
-	c.JSON(http.StatusOK, gin.H{"data": users})
+	c.JSON(http.StatusOK, users)
 }
 
+// AddUser godoc
+// @Summary Add a user
+// @Description Add a user. If you added user this way, you will not be able to login. Use /auth/register instead.
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param input body model.User true "User"
+// @Success 201 {object} model.User
+// @Failure 400 "Bad request"
+// @Router /api/users [post]
+// @Security JwtAuth
 func AddUser(c *gin.Context) {
 	var input model.User
 
@@ -34,16 +55,39 @@ func AddUser(c *gin.Context) {
 	}
 	addedUser := service.AddUser(input)
 
-	c.JSON(http.StatusCreated, gin.H{"data": addedUser})
+	c.JSON(http.StatusCreated, addedUser)
 }
 
+// GetUserById godoc
+// @Summary Get user by id
+// @Description Get user by id
+// @Tags Users
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} model.User
+// @Failure 404 "Not found"
+// @Router /api/users/{id} [get]
+// @Security JwtAuth
 func GetUserById(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
 	user := service.GetUserById(idx)
-	c.JSON(http.StatusOK, gin.H{"data": user})
+	c.JSON(http.StatusOK, user)
 }
 
+// UpdateUser godoc
+// @Summary Update a user
+// @Description Update a user information (name, surname, interests, hobby, age, description).
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param input body model.User true "User"
+// @Success 200 {object} model.User
+// @Failure 400 "Bad request"
+// @Failure 401 "Unauthorized"
+// @Router /api/users/{id} [patch]
+// @Security JwtAuth
 func UpdateUser(c *gin.Context) {
 	var input model.User
 	id := c.Param("id")
@@ -70,9 +114,17 @@ func UpdateUser(c *gin.Context) {
 
 	updatedUser := service.UpdateUser(user)
 
-	c.JSON(http.StatusOK, gin.H{"data": updatedUser})
+	c.JSON(http.StatusOK, updatedUser)
 }
 
+// DeleteUser godoc
+// @Summary Delete a user
+// @Description Delete a user
+// @Tags Users
+// @Success 204 "No content"
+// @Param id path int true "User ID"
+// @Router /api/users/{id} [delete]
+// @Security JwtAuth
 func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
@@ -80,5 +132,5 @@ func DeleteUser(c *gin.Context) {
 
 	service.DeleteUser(user)
 
-	c.JSON(http.StatusNoContent, gin.H{})
+	c.Status(http.StatusNoContent)
 }
