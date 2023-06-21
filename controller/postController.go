@@ -70,7 +70,11 @@ func AddPost(c *gin.Context) {
 func GetPostById(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
-	post := service.GetPostById(idx)
+	post, err := service.GetPostById(idx)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, post)
 }
 
@@ -90,7 +94,11 @@ func UpdatePost(c *gin.Context) {
 	var input model.Post
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
-	post := service.GetPostById(idx)
+	post, err := service.GetPostById(idx)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -113,7 +121,13 @@ func UpdatePost(c *gin.Context) {
 func DeletePost(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
-	post := service.GetPostById(idx)
+	post, err := service.GetPostById(idx)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
 	service.DeletePost(post)
 	c.Status(http.StatusNoContent)
 }
