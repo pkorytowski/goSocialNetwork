@@ -13,12 +13,12 @@ import (
 // GetPostsByUserId godoc
 // @Summary Get posts by user id
 // @Description Get posts for given user
-// @Tags Posts
+// @Tags Users
 // @Produces json
 // @Param id path int true "User ID"
 // @Success 200 {array} model.Post
 // @Router /api/users/{id}/posts [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetPostsByUserId(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
@@ -37,7 +37,7 @@ func GetPostsByUserId(c *gin.Context) {
 // @Success 201 {object} model.Post
 // @Failure 400 "Bad request"
 // @Router /api/posts [post]
-// @Security JwtAuth
+// @Security Bearer
 func AddPost(c *gin.Context) {
 	userId, _ := token.ExtractTokenID(c)
 
@@ -66,7 +66,7 @@ func AddPost(c *gin.Context) {
 // @Param id path int true "Post ID"
 // @Success 200 {object} model.Post
 // @Router /api/posts/{id} [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetPostById(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
@@ -84,8 +84,8 @@ func GetPostById(c *gin.Context) {
 // @Param input body model.Post true "Post"
 // @Success 200 {object} model.Post
 // @Failure 400 "Bad request"
-// @Router /api/posts/{id} [put]
-// @Security JwtAuth
+// @Router /api/posts/{id} [patch]
+// @Security Bearer
 func UpdatePost(c *gin.Context) {
 	var input model.Post
 	id := c.Param("id")
@@ -109,7 +109,7 @@ func UpdatePost(c *gin.Context) {
 // @Failure 404 "Not Found"
 // @Param id path int true "Post ID"
 // @Router /api/posts/{id} [delete]
-// @Security JwtAuth
+// @Security Bearer
 func DeletePost(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)

@@ -17,7 +17,7 @@ import (
 // @Param id path int true "Post ID"
 // @Success 200 {object} model.Comment
 // @Router /api/comments/{id} [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetCommentsByPostId(c *gin.Context) {
 	postId := c.Param("id")
 	idx, _ := strconv.Atoi(postId)
@@ -37,7 +37,7 @@ func GetCommentsByPostId(c *gin.Context) {
 // @Param input body model.Comment true "Comment"
 // @Success 201 {object} model.Comment
 // @Router /api/comments [post]
-// @Security JwtAuth
+// @Security Bearer
 func AddComment(c *gin.Context) {
 	userId, _ := token.ExtractTokenID(c)
 
@@ -73,8 +73,8 @@ func AddComment(c *gin.Context) {
 // @Param id path int true "Comment ID"
 // @Param input body model.Comment true "Comment"
 // @Success 200 {object} model.Comment
-// @Router /api/comments/{id} [put]
-// @Security JwtAuth
+// @Router /api/comments/{id} [patch]
+// @Security Bearer
 func UpdateComment(c *gin.Context) {
 	userId, _ := token.ExtractTokenID(c)
 
@@ -116,7 +116,7 @@ func UpdateComment(c *gin.Context) {
 // @Failure 404 "Not found"
 // @Failure 401 "Unauthorized"
 // @Router /api/comments/{id} [delete]
-// @Security JwtAuth
+// @Security Bearer
 func DeleteComment(c *gin.Context) {
 	userId, _ := token.ExtractTokenID(c)
 
@@ -136,6 +136,5 @@ func DeleteComment(c *gin.Context) {
 	}
 
 	service.DeleteComment(comment)
-
 	c.Status(http.StatusNoContent)
 }

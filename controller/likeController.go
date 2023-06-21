@@ -20,7 +20,7 @@ import (
 // @Failure 400 "Bad request"
 // @Failure 401 "Unauthorized"
 // @Router /api/likes [post]
-// @Security JwtAuth
+// @Security Bearer
 func AddLike(c *gin.Context) {
 	var input model.Like
 
@@ -54,7 +54,7 @@ func AddLike(c *gin.Context) {
 // @Failure 401 "Unauthorized"
 // @Param id path int true "Like ID"
 // @Router /api/likes/{id} [delete]
-// @Security JwtAuth
+// @Security Bearer
 func DeleteLike(c *gin.Context) {
 
 	id := c.Param("id")
@@ -86,7 +86,7 @@ func DeleteLike(c *gin.Context) {
 // @Param id path int true "Post ID"
 // @Success 200 {array} model.Like
 // @Router /api/posts/{id}/likes [get]
-// @Security JwtAuth
+// @Security Bearer
 func GetLikesByPostId(c *gin.Context) {
 	id := c.Param("id")
 	idx, _ := strconv.Atoi(id)
