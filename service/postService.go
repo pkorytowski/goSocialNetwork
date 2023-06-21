@@ -1,6 +1,9 @@
 package service
 
-import "socialNetwork/model"
+import (
+	"errors"
+	"socialNetwork/model"
+)
 
 func GetPostsByUserId(userId int) []model.Post {
 	var posts []model.Post
@@ -8,10 +11,15 @@ func GetPostsByUserId(userId int) []model.Post {
 	return posts
 }
 
-func GetPostById(id int) model.Post {
+func GetPostById(id int) (*model.Post, error) {
 	var post model.Post
 	model.DB.First(&post, id)
-	return post
+
+	if post.ID == 0 {
+		return nil, errors.New("post not found")
+	}
+
+	return &post, nil
 }
 
 func AddPost(data map[string]interface{}) (*model.Post, error) {
@@ -26,11 +34,11 @@ func AddPost(data map[string]interface{}) (*model.Post, error) {
 	return &post, nil
 }
 
-func UpdatePost(post model.Post) model.Post {
-	model.DB.Save(&post)
+func UpdatePost(post *model.Post) *model.Post {
+	model.DB.Save(post)
 	return post
 }
 
-func DeletePost(post model.Post) {
-	model.DB.Delete(&post)
+func DeletePost(post *model.Post) {
+	model.DB.Delete(post)
 }

@@ -12,6 +12,7 @@ import (
 // @Description Register new user in system and create an account
 // @Tags Authorization
 // @Accept json
+// @Param user body dto.LoginDto true "User credentials"
 // @Success 201 "Created"
 // @Failure 400 {string} string "Reason"
 // @Router /auth/register [post]

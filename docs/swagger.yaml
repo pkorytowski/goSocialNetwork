@@ -1,0 +1,622 @@
+definitions:
+  dto.LoginDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.PostInputDto:
+    properties:
+      content:
+        type: string
+    type: object
+  dto.TokenDto:
+    properties:
+      token:
+        type: string
+    type: object
+  model.Comment:
+    properties:
+      author_id:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      parent_comment_id:
+        type: integer
+      post_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.Follow:
+    properties:
+      followed_id:
+        type: integer
+      follows_id:
+        type: integer
+      id:
+        type: integer
+    type: object
+  model.Like:
+    properties:
+      id:
+        type: integer
+      post_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  model.Post:
+    properties:
+      author_id:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        type: integer
+      description:
+        type: string
+      email:
+        type: string
+      hobby:
+        type: string
+      id:
+        type: integer
+      interests:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a social network API server created for GO classes.
+  title: Social Network API
+  version: "1.0"
+paths:
+  /api/comments:
+    post:
+      consumes:
+      - application/json
+      description: Add comment
+      parameters:
+      - description: Comment
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Comment'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Comment'
+      security:
+      - Bearer: []
+      summary: Add comment
+      tags:
+      - Comments
+  /api/comments/{id}:
+    delete:
+      description: Delete comment
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+      security:
+      - Bearer: []
+      summary: Delete comment
+      tags:
+      - Comments
+    get:
+      description: Get comments by post id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Comment'
+      security:
+      - Bearer: []
+      summary: Get comments by post id
+      tags:
+      - Comments
+    patch:
+      consumes:
+      - application/json
+      description: Update comment
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Comment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Comment'
+      security:
+      - Bearer: []
+      summary: Update comment
+      tags:
+      - Comments
+  /api/follows:
+    post:
+      consumes:
+      - application/json
+      description: Follow an user
+      parameters:
+      - description: Follow
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Follow'
+      responses: {}
+      security:
+      - Bearer: []
+      summary: Add follow
+      tags:
+      - Follow
+  /api/follows/{id}:
+    delete:
+      description: Delete follow
+      parameters:
+      - description: Follow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+      security:
+      - Bearer: []
+      summary: Delete follow
+      tags:
+      - Follow
+    get:
+      description: Get followed by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get followed by user id
+      tags:
+      - Follow
+  /api/likes:
+    post:
+      consumes:
+      - application/json
+      description: Add a like to a post
+      parameters:
+      - description: Like
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Like'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Like'
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+      security:
+      - Bearer: []
+      summary: Add a like
+      tags:
+      - Likes
+  /api/likes/{id}:
+    delete:
+      description: Delete a like
+      parameters:
+      - description: Like ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - Bearer: []
+      summary: Delete a like
+      tags:
+      - Likes
+  /api/posts:
+    post:
+      consumes:
+      - application/json
+      description: Add a post
+      parameters:
+      - description: Post
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PostInputDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Post'
+        "400":
+          description: Bad request
+      security:
+      - Bearer: []
+      summary: Add a post
+      tags:
+      - Posts
+  /api/posts/{id}:
+    delete:
+      description: Delete a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+      security:
+      - Bearer: []
+      summary: Delete a post
+      tags:
+      - Posts
+    get:
+      description: Get post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Post'
+      security:
+      - Bearer: []
+      summary: Get post by id
+      tags:
+      - Posts
+    patch:
+      consumes:
+      - application/json
+      description: Update a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Post'
+        "400":
+          description: Bad request
+      security:
+      - Bearer: []
+      summary: Update a post
+      tags:
+      - Posts
+  /api/posts/{id}/likes:
+    get:
+      description: Get likes for a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Like'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get likes by post id
+      tags:
+      - Likes
+  /api/users:
+    get:
+      description: Get all users. Pass email query param to get user by email
+      parameters:
+      - description: Email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "404":
+          description: Not found
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Add a user. If you added user this way, you will not be able to
+        login. Use /auth/register instead.
+      parameters:
+      - description: User
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad request
+      security:
+      - Bearer: []
+      summary: Add a user
+      tags:
+      - Users
+  /api/users/{id}:
+    delete:
+      description: Delete a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No content
+      security:
+      - Bearer: []
+      summary: Delete a user
+      tags:
+      - Users
+    get:
+      description: Get user by id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "404":
+          description: Not found
+      security:
+      - Bearer: []
+      summary: Get user by id
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update a user information (name, surname, interests, hobby, age,
+        description).
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+      security:
+      - Bearer: []
+      summary: Update a user
+      tags:
+      - Users
+  /api/users/{id}/followers:
+    get:
+      description: Get follows by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get follows by user id
+      tags:
+      - Users
+  /api/users/{id}/posts:
+    get:
+      description: Get posts for given user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Post'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get posts by user id
+      tags:
+      - Users
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user to get access to api
+      parameters:
+      - description: User credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            $ref: '#/definitions/dto.TokenDto'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Login user
+      tags:
+      - Authorization
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user in system and create an account
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Reason
+          schema:
+            type: string
+      summary: Register user
+      tags:
+      - Authorization
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
